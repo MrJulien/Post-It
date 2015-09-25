@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" type="text/css" href="css/style.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script type="text/javascript" src="js/socket.io.js"></script>
     <script type="text/javascript" src="js/cobra.js"></script>
     <script type="text/javascript" src="js/postIt.js"></script>
@@ -13,7 +14,9 @@
     <script type="text/javascript" src="js/trash.js"></script>
 </head>
 <body>
-    <input id="roomName" name="roomName" type="text" placeholder="Nom de votre tableau" />
-    <button id="enterRoomButton">Enter</button>
+    <div id="inputBoard">
+        <input id="boardName" name="boardName" type="text" placeholder="Nom de votre tableau" />
+        <button id="boardButton" onclick="new Board().initBoard()">Enter</button>
+    </div>
 </body>
 </html>

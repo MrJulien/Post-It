@@ -1,5 +1,5 @@
 function Trash() {
-    this.myTrash = new Array();
+    this.myTrash = [];
 }
 
 Trash.prototype = {
