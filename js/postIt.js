@@ -4,9 +4,5 @@ function PostIt(id, content) {
 }
 
 PostIt.prototype = {
-
-	initPostIt(): function() {
-
-	}
 	
 };

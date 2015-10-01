@@ -1,11 +1,9 @@
 function Board() {
     if (document.getElementById("inputBoardName").value.length > 0) {
         this.title = document.getElementById("inputBoardName").value;
-        this.myBoard = [];
-        this.body = document.getElementsByTagName("body")[0];
         this.postIt = 0;
-
-        this.initBoard();
+        
+        this.cobra = new Cobra();
     }
 }
 
@@ -34,7 +32,7 @@ Board.prototype = {
     },
     
     initCobra: function () {
-        var cobra = new Cobra(),
+        var cobra = this.cobra,
             room =  this.title,
             socketId,
             apiUrl = 'http://cobra-framework.com:3000/api/events/' + room;
@@ -103,6 +101,9 @@ Board.prototype = {
             cobra.clientLeftRoomCallback = function(data){
                 // Un client a quitté la room
         }
+    },
+    
+    sendMessage: function(message, roomName, toAll) {
+        this.cobra.sendMessage(message, roomName, toAll);
     }
-           
 };
