@@ -1,18 +1,36 @@
 function Board() {
-    this.title = document.getElementById("boardName").value;
-    this.myBoard = [];
-    this.body = document.getElementsByTagName("body")[0];
+    if (document.getElementById("inputBoardName").value.length > 0) {
+        this.title = document.getElementById("inputBoardName").value;
+        this.myBoard = [];
+        this.body = document.getElementsByTagName("body")[0];
+        this.postIt = 0;
+
+        this.initBoard();
+    }
 }
 
 Board.prototype = {
     
-    initBoard: function () { 
-        var divBoard = document.createElement("div");   
-        this.body.removeChild(document.getElementById("inputBoard"));
-        divBoard.id = 'board';
-        this.body.appendChild(divBoard);
-        
+    initBoard: function () {        
         this.initCobra();
+        this.initPostItBoard();
+    },
+
+    initPostItBoard: function () {
+        document.getElementById('inputBoardName').setAttribute('placeholder', 'Nom de votre Post-it');
+        document.getElementById('inputBoardName').value = '';
+        document.getElementById('inputBoardName').setAttribute('id', 'inputPostItName');
+
+        document.getElementById('initBoardDiv').setAttribute('id', 'boardDiv');
+
+        document.getElementById('enterBoardButton').setAttribute('onclick', '');
+        document.getElementById('enterBoardButton').setAttribute('id', 'addPostItButton');
+
+        document.getElementById('addPostItButton').childNodes[0].setAttribute('class', 'fa fa-plus');
+    },
+
+    createPostIt: function() {
+
     },
     
     initCobra: function () {
@@ -42,6 +60,10 @@ Board.prototype = {
 
                 complete: function (result, status) {
                   console.log("complete");
+
+                  if (result.responseJSON.Events.length > 0)
+                    this.postIt = result.responseJSON.Events.length;
+
                   for (var i = 0; i < result.responseJSON.Events.length; i++) {
                     var content = result.responseJSON.Events[i].content;
                      // recuperer les infos contenues dans les messages
