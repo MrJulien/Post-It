@@ -1,36 +1,27 @@
 function Board() {
-    if (document.getElementById("inputBoardName").value.length > 0) {
-        this.title = document.getElementById("inputBoardName").value;
-        this.postIt = 0;
-        
-        this.cobra = new Cobra();
-    }
+    this.title = document.getElementById("inputBoardName").value;
+    this.postIt = 0;
+    this.body = document.getElementsByTagName("body")[0];
+    this.cobra = new Cobra();
 }
 
 Board.prototype = {
     
     initBoard: function () {        
+        this.body.removeChild(document.getElementById("initBoard"));
+        var divBoard = document.createElement("div");   
+        divBoard.id = "board";
+        this.body.appendChild(divBoard);
+        
+        var buttonPostIt = document.createElement("button");   
+        buttonPostIt.id = "buttonPostIt";
+        buttonPostIt.className = "btn btn-default btn-lg";
+        buttonPostIt.innerHTML = "<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>";
+        divBoard.appendChild(buttonPostIt);
+        
         this.initCobra();
-        this.initPostItBoard();
     },
 
-    initPostItBoard: function () {
-        document.getElementById('inputBoardName').setAttribute('placeholder', 'Nom de votre Post-it');
-        document.getElementById('inputBoardName').value = '';
-        document.getElementById('inputBoardName').setAttribute('id', 'inputPostItName');
-
-        document.getElementById('initBoardDiv').setAttribute('id', 'boardDiv');
-
-        document.getElementById('enterBoardButton').setAttribute('onclick', '');
-        document.getElementById('enterBoardButton').setAttribute('id', 'addPostItButton');
-
-        document.getElementById('addPostItButton').childNodes[0].setAttribute('class', 'fa fa-plus');
-    },
-
-    createPostIt: function() {
-
-    },
-    
     initCobra: function () {
         var cobra = this.cobra,
             room =  this.title,

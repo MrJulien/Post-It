@@ -24,33 +24,19 @@
     <script type="text/javascript" src="js/postIt.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div id="initBoard" class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-                <div id="initBoardDiv" class="input-group">
-                    <input type="text" id="inputBoardName" class="form-control" placeholder="Nom de votre tableau" onkeypress="(event.keyCode == 13) ? $('#enterBoardButton').click() : '';" required autofocus>
+                <div id="inputBoard" class="input-group">
+                    <input type="text" id="inputBoardName" class="form-control" placeholder="Nom du tableau" >
                     <span class="input-group-btn">
                         <button id="enterBoardButton" class="btn btn-success" type="submit"><i class="fa fa-sign-in"></i></button>
                     </span>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4" style="padding-top: 20px;">
-                <div class="postItBoard" style="height: 250px;">
-                    <div id="1" class="panel panel-default draggable">
-                        <div class="panel-body">
-                            #1 Post-It
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container">
-            <p class="text-muted text-right"><i class="glyphicon glyphicon-trash"></i></p>
-        </div>
-    </footer>
 
-    <script type="text/javascript" src="js/event.js"></script>
+    <script type="text/javascript" src="js/launchControl.js"></script>
 </body>
 </html>
