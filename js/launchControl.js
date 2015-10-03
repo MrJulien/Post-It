@@ -12,10 +12,15 @@ LaunchControl.prototype = {
         _this = this;
         var buttonBoard = document.getElementById("enterBoardButton");
         buttonBoard.addEventListener("click", function(){
+            if(document.getElementById("inputBoardName").value != "") {
                 this.board = new Board();
                 this.board.initBoard();
                 _this.postItListener();
-            });
+            }
+            else {
+                alert("Nom du tableau incorrect");
+            }
+        });
     },
     
     postItListener: function() {
