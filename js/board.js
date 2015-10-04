@@ -1,15 +1,12 @@
 function Board() {
-    if (document.getElementById("inputBoardName").value.length > 0) {
-        this.title = document.getElementById("inputBoardName").value;
-        this.postIt = 0;
-        
-        this.cobra = new Cobra();
-    }
+    this.title = document.getElementById("inputBoardName").value;
+
+    this.cobra = new Cobra();
 }
 
 Board.prototype = {
     
-    initBoard: function () {        
+    initBoard: function () {      
         this.initCobra();
         this.initPostItBoard();
     },
@@ -25,10 +22,16 @@ Board.prototype = {
         document.getElementById('enterBoardButton').setAttribute('id', 'addPostItButton');
 
         document.getElementById('addPostItButton').childNodes[0].setAttribute('class', 'fa fa-plus');
+
+        document.getElementById("addPostItButton").addEventListener("click", this.createPostIt);
     },
 
     createPostIt: function() {
+        var postItContent = document.getElementById('inputPostItName').value;
+        alert(postItContent);
 
+        var postIt = new PostIt(postItContent);
+        postIt.initPostIt();
     },
     
     initCobra: function () {
@@ -58,9 +61,6 @@ Board.prototype = {
 
                 complete: function (result, status) {
                   console.log("complete");
-
-                  if (result.responseJSON.Events.length > 0)
-                    this.postIt = result.responseJSON.Events.length;
 
                   for (var i = 0; i < result.responseJSON.Events.length; i++) {
                     var content = result.responseJSON.Events[i].content;

@@ -1,8 +1,11 @@
-function PostIt(id, content) {
+function PostIt(content) {
     this.content = content;
-    this.id = id;
 }
 
 PostIt.prototype = {
+
+	initPostIt: function() {
+		alert("content : " + this.content);
+	}
 	
 };
