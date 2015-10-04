@@ -1,6 +1,6 @@
 function Board() {
     this.title = document.getElementById("inputBoardName").value;
-    this.postIt = 0;
+    this.listPostIt = new Array();
     this.body = document.getElementsByTagName("body")[0];
     this.cobra = new Cobra();
 }
@@ -9,18 +9,33 @@ Board.prototype = {
     
     initBoard: function () {        
         this.body.removeChild(document.getElementById("initBoard"));
+        
         var divBoard = document.createElement("div");   
         divBoard.id = "board";
         this.body.appendChild(divBoard);
         
         var buttonPostIt = document.createElement("button");   
         buttonPostIt.id = "buttonPostIt";
-        buttonPostIt.className = "btn btn-default btn-lg";
+        buttonPostIt.className = "btn btn-success btn-lg";
         buttonPostIt.innerHTML = "<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>";
         divBoard.appendChild(buttonPostIt);
+
+        var divRow = document.createElement("div");
+        divRow.id = "rowBoard";
+        divRow.className = "row";
+        divBoard.appendChild(divRow);
         
         this.initCobra();
     },
+    
+    /*initPostIt: function () {
+        console.log("initPostIt");
+        var postIt = new PostIt(this.listPostIt.length + 1);
+
+        postIt.create();
+
+        this.listPostIt.push(postIt);
+    },*/
 
     initCobra: function () {
         var cobra = this.cobra,

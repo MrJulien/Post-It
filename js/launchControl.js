@@ -25,8 +25,11 @@ LaunchControl.prototype = {
     
     postItListener: function() {
         document.getElementById("buttonPostIt").addEventListener("click", function(){
-                console.log("createPostIt");
-            });
+            console.log("createPostIt");
+            var postIt = new PostIt();
+            postIt.create();
+            postIt.listener();
+        });
     }
 };
 

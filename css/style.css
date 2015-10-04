@@ -24,7 +24,6 @@ body {
 #buttonPostIt {
 	width:75px;
 	height:75px;
-	background:#5cb85c;
 	font:bold 13px Arial;
 	border-radius:50%;
 	border:none;
@@ -34,4 +33,14 @@ body {
     position:fixed;
     top: 100%;
     margin-top:-100px;
+}
+
+#rowBoard {
+	padding-top: 10px;
+    padding-left: 20px;
+}
+
+/* Redimensionnement vertical uniquement  */
+textarea {
+	resize: vertical;
 }
