@@ -1,6 +1,5 @@
 function Board() {
     this.title = document.getElementById("inputBoardName").value;
-    this.listPostIt = new Array();
     this.body = document.getElementsByTagName("body")[0];
     this.cobra = new Cobra();
 }
@@ -28,20 +27,12 @@ Board.prototype = {
         this.initCobra();
     },
     
-    /*initPostIt: function () {
-        console.log("initPostIt");
-        var postIt = new PostIt(this.listPostIt.length + 1);
-
-        postIt.create();
-
-        this.listPostIt.push(postIt);
-    },*/
-
     initCobra: function () {
         var cobra = this.cobra,
             room =  this.title,
             socketId,
-            apiUrl = 'http://cobra-framework.com:3000/api/events/' + room;
+            apiUrl = 'http://cobra-framework.com:3000/api/events/' + room,
+            _this = this;
 
         cobra.connect('http://cobra-framework.com:8080');
 
@@ -63,24 +54,51 @@ Board.prototype = {
                 },
 
                 complete: function (result, status) {
-                  console.log("complete");
-
-                  for (var i = 0; i < result.responseJSON.Events.length; i++) {
-                    var content = result.responseJSON.Events[i].content;
-                     // recuperer les infos contenues dans les messages
-                    console.log(content);  
-                  }
+                    console.log("complete");
                 
-                // Pour envoyer un message dans toute la room
-                // cobra.sendMessage({content : "test"}, room, true);
+                    var postItTab = [],
+                        postItTabId = [],
+                        index;
+                    
+                    for (var i = 0; i < result.responseJSON.Events.length; i++) {
+                        var content = JSON.parse(result.responseJSON.Events[i].content).message.content;
+                        // recuperer les infos contenues dans les messages
+                        var split = content.split("'/'"),
+                            goal = split[1];
 
-                // Pour envoyer un message dans toute la room excepté soi
-                // cobra.sendMessage({content : "test"}, room, false);
+                        if(goal == "createPostIt") {
+                            var postIt = {
+                                board : _this,
+                                id : split[0],
+                                contentPostIt : split[2]
+                            };
+                        }
+
+                        index = postItTabId.indexOf(postIt.id);
+                        if(index == -1) {
+                            postItTabId.push(postIt.id);
+                            postItTab.push(postIt);
+                        }
+                        else {
+                            postItTab[index] = postIt;
+                        }
+                    }
+                    
+                    for (var i = 0; i < postItTab.length; i++) {
+                        var postIt = new PostIt(postItTab[i].board, postItTab[i].id, postItTab[i].contentPostIt);
+                        postIt.create();
+                    }
+                        
+                    // Pour envoyer un message dans toute la room
+                    // cobra.sendMessage({content : "test"}, room, true);
+
+                    // Pour envoyer un message dans toute la room excepté soi
+                    // cobra.sendMessage({content : "test"}, room, false);
                  }
               });
             }
 
-            cobra.messageReceivedCallback = function (message) {
+            cobra.messageReceivedCallback = function (message) {      
                 // Lors de l'arrivée dans une room donne la liste des utilisateurs contenus dans la room
                 if(message.type == "infos"){
                     for(var i = 0; i < message.clients.length; i++)
@@ -93,7 +111,18 @@ Board.prototype = {
                 }
                 else if (message.message) {
                    // Message reçu, je le traite
-                   console.log(message.message);
+                    var split = message.message.content.split("'/'"),
+                        id = split[0],
+                        goal = split[1],
+                        contentPostIt = split[2];
+                    
+                    if(document.getElementById("postIt"+id) == null) {
+                        var postIt = new PostIt( _this, id, contentPostIt);
+                        postIt.create();
+                    }
+                    else {
+                        document.getElementById("postItText"+id).value = contentPostIt;
+                    }         
                }
             }
 

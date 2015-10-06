@@ -1,16 +1,16 @@
-var postId = 0;
-
-function PostIt() {
-	postId++;
-	this.postItId = postId;
-    this.postItContent = "";
+function PostIt(board, id, content) {
+	this.id = id;
+    this.content = content;
+    this.board = board;
 }
 
 PostIt.prototype = {
 
 	create: function() {
-		var divPostIt = document.createElement("div");
-		divPostIt.id = "postIt"+this.postItId;
+        var _this = this,
+		  divPostIt = document.createElement("div");
+        
+		divPostIt.id = "postIt"+this.id;
 		divPostIt.className = "col-md-2 col-xs-12 col-sm-6 panel panel-success draggable";
 		document.getElementById("rowBoard").appendChild(divPostIt);
 
@@ -19,16 +19,26 @@ PostIt.prototype = {
 		divPostIt.appendChild(divPostItBody);
 
 		var textareaPostIt = document.createElement("textarea");
-		textareaPostIt.id = "postItText"+this.postItId;
+		textareaPostIt.id = "postItText"+this.id;
 		textareaPostIt.className = "form-control";
-		textareaPostIt.setAttribute("placeholder", "Contenu de votre post-it");
+        if(this.content == "") {
+		  textareaPostIt.setAttribute("placeholder", "Contenu de votre post-it");
+        }
+        else {
+            textareaPostIt.value = _this.content;
+        }
 		divPostItBody.appendChild(textareaPostIt);
+        
+        this.contentlistener();
 
 	},
 
-	listener: function() {
-		document.getElementById("postItText"+this.postItId).addEventListener("change", function(e){
-			this.postItContent = e.currentTarget.value;
+	contentlistener: function() {
+        var _this = this;
+
+		document.getElementById("postItText"+this.id).addEventListener("change", function(e){
+			_this.content = e.currentTarget.value;
+            _this.board.sendMessage({content : _this.id+"'/'createPostIt'/'"+_this.content}, _this.board.title, true);
 		});
 	}
 	

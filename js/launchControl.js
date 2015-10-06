@@ -13,9 +13,9 @@ LaunchControl.prototype = {
         var buttonBoard = document.getElementById("enterBoardButton");
         buttonBoard.addEventListener("click", function(){
             if(document.getElementById("inputBoardName").value != "") {
-                this.board = new Board();
-                this.board.initBoard();
-                _this.postItListener();
+                _this.board = new Board();
+                _this.board.initBoard();
+                _this.createPostItListener();
             }
             else {
                 alert("Nom du tableau incorrect");
@@ -23,12 +23,11 @@ LaunchControl.prototype = {
         });
     },
     
-    postItListener: function() {
+    createPostItListener: function() {
+        _this = this;
         document.getElementById("buttonPostIt").addEventListener("click", function(){
-            console.log("createPostIt");
-            var postIt = new PostIt();
+            var postIt = new PostIt(_this.board, new Date(), "");
             postIt.create();
-            postIt.listener();
         });
     }
 };
