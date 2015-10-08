@@ -19,6 +19,12 @@ Board.prototype = {
         buttonPostIt.innerHTML = "<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>";
         divBoard.appendChild(buttonPostIt);
 
+        var buttonDeletePostIt = document.createElement("button")
+        buttonDeletePostIt.id= "buttonDeletePostIt";
+        buttonDeletePostIt.className = "btn btn-danger btn-lg";
+        buttonDeletePostIt.innerHTML = "<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>";
+        divBoard.appendChild(buttonDeletePostIt);
+
         var divRow = document.createElement("div");
         divRow.id = "rowBoard";
         divRow.className = "row";
