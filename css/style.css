@@ -53,6 +53,7 @@ body {
 }
 
 #rowBoard {
+    height: 100%;
 	padding-top: 10px;
     padding-left: 20px;
     background-color: #eee;
@@ -67,6 +68,6 @@ textarea {
     margin: 0;
 }
 
-#rowBoard {
-    height: 100%;
+.form-control:focus {
+    border-color: #d6e9c6; 
 }
