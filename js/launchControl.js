@@ -24,6 +24,7 @@ LaunchControl.prototype = {
             if(document.getElementById("inputBoardName").value != "") {
                 _this.board = new Board();
                 _this.board.initBoard();
+                _this.createPostItListener();
             }
             else {
                 alert("Nom du tableau incorrect");
