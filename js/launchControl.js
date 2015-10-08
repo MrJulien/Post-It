@@ -11,11 +11,19 @@ LaunchControl.prototype = {
     boardListener: function() {
         _this = this;
         var buttonBoard = document.getElementById("enterBoardButton");
+        var inputBoard = document.getElementById("inputBoardName");
+
+        inputBoard.addEventListener("keypress", function(event){
+            // Touche entrée pressée
+            if (event.keyCode == 13) {
+                buttonBoard.click();
+            }
+        });
+
         buttonBoard.addEventListener("click", function(){
             if(document.getElementById("inputBoardName").value != "") {
                 _this.board = new Board();
                 _this.board.initBoard();
-                _this.createPostItListener();
             }
             else {
                 alert("Nom du tableau incorrect");
