@@ -48,3 +48,7 @@ textarea {
 .row {
     margin: 0;
 }
+
+#rowBoard {
+    height: 100%;
+}
