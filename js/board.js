@@ -59,7 +59,7 @@ Board.prototype = {
                     var postItTab = [],
                         postItTabId = [],
                         index;
-                    
+
                     for (var i = 0; i < result.responseJSON.Events.length; i++) {
                         var content = JSON.parse(result.responseJSON.Events[i].content).message.content;
                         // recuperer les infos contenues dans les messages
@@ -70,7 +70,9 @@ Board.prototype = {
                             var postIt = {
                                 board : _this,
                                 id : split[0],
-                                contentPostIt : split[2]
+                                contentPostIt : split[2],
+                                dx : split[3],
+                                dy : split[4]
                             };
                         }
 
@@ -85,7 +87,7 @@ Board.prototype = {
                     }
                     
                     for (var i = 0; i < postItTab.length; i++) {
-                        var postIt = new PostIt(postItTab[i].board, postItTab[i].id, postItTab[i].contentPostIt);
+                        var postIt = new PostIt(postItTab[i].board, postItTab[i].id, postItTab[i].contentPostIt, postItTab[i].dx, postItTab[i].dy);
                         postIt.create();
                     }
                         
@@ -114,14 +116,19 @@ Board.prototype = {
                     var split = message.message.content.split("'/'"),
                         id = split[0],
                         goal = split[1],
-                        contentPostIt = split[2];
+                        contentPostIt = split[2],
+                        dx = split[3],
+                        dy = split[4];
                     
                     if(document.getElementById("postIt"+id) == null) {
-                        var postIt = new PostIt( _this, id, contentPostIt);
+                        var postIt = new PostIt( _this, id, contentPostIt, dx, dy);
                         postIt.create();
                     }
                     else {
-                        document.getElementById("postItText"+id).value = contentPostIt;
+                        var postIt = document.getElementById("postItText"+id);
+                        postIt.value = contentPostIt;
+                        postIt.style.left = dx;
+                        postIt.style.top = dy;
                     }         
                }
             }

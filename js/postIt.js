@@ -1,7 +1,9 @@
-function PostIt(board, id, content) {
+function PostIt(board, id, content, dx, dy) {
 	this.id = id;
     this.content = content;
     this.board = board;
+    this.dx = dx;
+    this.dy = dy;
 }
 
 PostIt.prototype = {
@@ -12,6 +14,9 @@ PostIt.prototype = {
         
 		divPostIt.id = "postIt"+this.id;
 		divPostIt.className = "col-md-2 col-xs-12 col-sm-6 panel panel-success draggable";
+        divPostIt.style.position = "absolute";
+        divPostIt.style.left = this.dx+'px';
+        divPostIt.style.top = this.dy+'px';
 		document.getElementById("rowBoard").appendChild(divPostIt);
 
 		var divPostItBody = document.createElement("div");
@@ -30,16 +35,31 @@ PostIt.prototype = {
 		divPostItBody.appendChild(textareaPostIt);
         
         this.contentlistener();
+        this.endMovelistener();
 
 	},
 
 	contentlistener: function() {
         var _this = this;
-
 		document.getElementById("postItText"+this.id).addEventListener("change", function(e){
-			_this.content = e.currentTarget.value;
-            _this.board.sendMessage({content : _this.id+"'/'createPostIt'/'"+_this.content}, _this.board.title, true);
+			_this.createMessage();
 		});
-	}
+			
+	},
+		
+	endMovelistener: function() {
+        var _this = this;
+        
+        document.getElementById("postIt"+this.id).addEventListener("endMove", function(e) {
+            _this.createMessage(e);
+        });
+	},
+    
+    createMessage: function(e) {
+        var postIt = document.getElementById("postIt"+this.id);
+        
+        this.content = e.currentTarget.value;
+        this.board.sendMessage({content : this.id+"'/'createPostIt'/'"+_this.content+"'/'"+postIt.getAttribute("data-x")+"'/'"+postIt.getAttribute("data-y") }, this.board.title, true);
+    }
 	
 };

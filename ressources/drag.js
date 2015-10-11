@@ -20,6 +20,10 @@ interact('.draggable')
         'moved a distance of '
         + (Math.sqrt(event.dx * event.dx +
                      event.dy * event.dy)|0) + 'px');
+        
+        var customEvent = new CustomEvent("endMove");
+
+        event.target.dispatchEvent(customEvent);
     }
   });
 

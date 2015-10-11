@@ -35,7 +35,7 @@ LaunchControl.prototype = {
     createPostItListener: function() {
         _this = this;
         document.getElementById("buttonPostIt").addEventListener("click", function(){
-            var postIt = new PostIt(_this.board, new Date(), "");
+            var postIt = new PostIt(_this.board, new Date(), "", 10, 10);
             postIt.create();
         });
     }
