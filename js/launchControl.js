@@ -4,44 +4,43 @@ function LaunchControl() {
 
 LaunchControl.prototype = {
 
-    initialize: function() {
+    initialize: function () {
         this.boardListener();
     },
-    
-    boardListener: function() {
+
+    boardListener: function () {
         _this = this;
         var buttonBoard = document.getElementById("enterBoardButton");
         var inputBoard = document.getElementById("inputBoardName");
 
-        inputBoard.addEventListener("keypress", function(event){
+        inputBoard.addEventListener("keypress", function (event) {
             // Touche entrée pressée
             if (event.keyCode == 13) {
                 buttonBoard.click();
             }
         });
 
-        buttonBoard.addEventListener("click", function(){
-            if(document.getElementById("inputBoardName").value != "") {
+        buttonBoard.addEventListener("click", function () {
+            if (document.getElementById("inputBoardName").value != "") {
                 _this.board = new Board();
                 _this.board.initBoard();
                 _this.createPostItListener();
-            }
-            else {
+            } else {
                 alert("Nom du tableau incorrect");
             }
         });
     },
-    
-    createPostItListener: function() {
+
+    createPostItListener: function () {
         _this = this;
-        document.getElementById("buttonPostIt").addEventListener("click", function(){
-            var postIt = new PostIt(_this.board, new Date(), "", 10, 10);
+        document.getElementById("buttonPostIt").addEventListener("click", function () {
+            var postIt = new PostIt(_this.board, new Date(), "", "10", "10");
             postIt.create();
         });
     }
 };
 
-(function(){
+(function () {
     var launchControl = new LaunchControl();
     launchControl.initialize();
 })()

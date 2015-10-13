@@ -5,15 +5,15 @@ function Board() {
 }
 
 Board.prototype = {
-    
-    initBoard: function () {        
+
+    initBoard: function () {
         this.body.removeChild(document.getElementById("initBoard"));
-        
-        var divBoard = document.createElement("div");   
+
+        var divBoard = document.createElement("div");
         divBoard.id = "board";
         this.body.appendChild(divBoard);
-        
-        var buttonPostIt = document.createElement("button");   
+
+        var buttonPostIt = document.createElement("button");
         buttonPostIt.id = "buttonPostIt";
         buttonPostIt.className = "btn btn-success btn-lg";
         buttonPostIt.innerHTML = "<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>";
@@ -23,13 +23,13 @@ Board.prototype = {
         divRow.id = "rowBoard";
         divRow.className = "row";
         divBoard.appendChild(divRow);
-        
+
         this.initCobra();
     },
-    
+
     initCobra: function () {
         var cobra = this.cobra,
-            room =  this.title,
+            room = this.title,
             socketId,
             apiUrl = 'http://cobra-framework.com:3000/api/events/' + room,
             _this = this;
@@ -41,7 +41,7 @@ Board.prototype = {
         };
 
         cobra.joinRoomCallback = function (roomName) {
-           // appel à l'API pour récupérer tous les messages de la room roomName
+            // appel à l'API pour récupérer tous les messages de la room roomName
             $.ajax({
                 type: 'GET',
                 url: apiUrl,
@@ -55,7 +55,7 @@ Board.prototype = {
 
                 complete: function (result, status) {
                     console.log("complete");
-                
+
                     var postItTab = [],
                         postItTabId = [],
                         index;
@@ -63,86 +63,83 @@ Board.prototype = {
                     for (var i = 0; i < result.responseJSON.Events.length; i++) {
                         var content = JSON.parse(result.responseJSON.Events[i].content).message.content;
                         // recuperer les infos contenues dans les messages
-                        var split = content.split("'/'"),
-                            goal = split[1];
+                        if (content != null) {
+                            var split = content.split("'/'"),
+                                goal = split[1];
+                            console.log(content);
+                            if (goal == "createPostIt") {
+                                var postIt = {
+                                    board: _this,
+                                    id: split[0],
+                                    contentPostIt: split[2],
+                                    dx: split[3],
+                                    dy: split[4]
+                                };
+                            }
 
-                        if(goal == "createPostIt") {
-                            var postIt = {
-                                board : _this,
-                                id : split[0],
-                                contentPostIt : split[2],
-                                dx : split[3],
-                                dy : split[4]
-                            };
-                        }
-
-                        index = postItTabId.indexOf(postIt.id);
-                        if(index == -1) {
-                            postItTabId.push(postIt.id);
-                            postItTab.push(postIt);
-                        }
-                        else {
-                            postItTab[index] = postIt;
+                            index = postItTabId.indexOf(postIt.id);
+                            if (index == -1) {
+                                postItTabId.push(postIt.id);
+                                postItTab.push(postIt);
+                            } else {
+                                postItTab[index] = postIt;
+                            }
                         }
                     }
-                    
+
                     for (var i = 0; i < postItTab.length; i++) {
                         var postIt = new PostIt(postItTab[i].board, postItTab[i].id, postItTab[i].contentPostIt, postItTab[i].dx, postItTab[i].dy);
                         postIt.create();
                     }
-                        
+
                     // Pour envoyer un message dans toute la room
                     // cobra.sendMessage({content : "test"}, room, true);
 
                     // Pour envoyer un message dans toute la room excepté soi
                     // cobra.sendMessage({content : "test"}, room, false);
-                 }
-              });
-            }
-
-            cobra.messageReceivedCallback = function (message) {      
-                // Lors de l'arrivée dans une room donne la liste des utilisateurs contenus dans la room
-                if(message.type == "infos"){
-                    for(var i = 0; i < message.clients.length; i++)
-                    {
-                        // Contient l'id du client
-                        var client = message.clients[i];
-                    }
-                    // Mon id attribué par la room
-                    socketId = message.socketId;
                 }
-                else if (message.message) {
-                   // Message reçu, je le traite
-                    var split = message.message.content.split("'/'"),
-                        id = split[0],
-                        goal = split[1],
-                        contentPostIt = split[2],
-                        dx = split[3],
-                        dy = split[4];
-                    
-                    if(document.getElementById("postIt"+id) == null) {
-                        var postIt = new PostIt( _this, id, contentPostIt, dx, dy);
-                        postIt.create();
-                    }
-                    else {
-                        var postIt = document.getElementById("postItText"+id);
-                        postIt.value = contentPostIt;
-                        postIt.style.left = dx;
-                        postIt.style.top = dy;
-                    }         
-               }
-            }
+            });
+        }
 
-            cobra.clientJoinedRoomCallback = function(data){
-                // Un autre client a rejoint la room
-            }
+        cobra.messageReceivedCallback = function (message) {
+            // Lors de l'arrivée dans une room donne la liste des utilisateurs contenus dans la room
+            if (message.type == "infos") {
+                for (var i = 0; i < message.clients.length; i++) {
+                    // Contient l'id du client
+                    var client = message.clients[i];
+                }
+                // Mon id attribué par la room
+                socketId = message.socketId;
+            } else if (message.message) {
+                // Message reçu, je le traite
+                console.log(message.message);
+                var split = message.message.content.split("'/'"),
+                    id = split[0],
+                    goal = split[1],
+                    contentPostIt = split[2],
+                    dx = split[3],
+                    dy = split[4];
 
-            cobra.clientLeftRoomCallback = function(data){
-                // Un client a quitté la room
+                if (document.getElementById("postIt" + id) == null) {
+                    var postIt = new PostIt(_this, id, contentPostIt, dx, dy);
+                    postIt.create();
+                } else {
+                    document.getElementById("postItText" + id).value = contentPostIt;
+                    document.getElementById("postIt" + id).style.transform = "translate(" + dx + "px," + dy + "px)";
+                }
+            }
+        }
+
+        cobra.clientJoinedRoomCallback = function (data) {
+            // Un autre client a rejoint la room
+        }
+
+        cobra.clientLeftRoomCallback = function (data) {
+            // Un client a quitté la room
         }
     },
-    
-    sendMessage: function(message, roomName, toAll) {
+
+    sendMessage: function (message, roomName, toAll) {
         this.cobra.sendMessage(message, roomName, toAll);
     }
 };
