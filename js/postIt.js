@@ -17,7 +17,8 @@ PostIt.prototype = {
         divPostIt.style.position = "absolute";
         document.getElementById("rowBoard").appendChild(divPostIt);
         divPostIt.style.transform = "translate(" + this.dx + "px," + this.dy + "px)";
-        divPostIt.style.left = divPostIt.offsetLeft;
+        divPostIt.setAttribute("data-x", this.dx);
+        divPostIt.setAttribute("data-y", this.dy);
 
         var divPostItBody = document.createElement("div");
         divPostItBody.className = "panel-body";
@@ -59,7 +60,6 @@ PostIt.prototype = {
             _this.board.sendMessage({
                 content: _this.id + "'/'createPostIt'/'" + _this.content + "'/'" + postIt.getAttribute("data-x") + "'/'" + postIt.getAttribute("data-y")
             }, _this.board.title, true);
-
         });
     }
 };

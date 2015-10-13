@@ -66,7 +66,6 @@ Board.prototype = {
                         if (content != null) {
                             var split = content.split("'/'"),
                                 goal = split[1];
-                            console.log(content);
                             if (goal == "createPostIt") {
                                 var postIt = {
                                     board: _this,
@@ -112,7 +111,6 @@ Board.prototype = {
                 socketId = message.socketId;
             } else if (message.message) {
                 // Message reçu, je le traite
-                console.log(message.message);
                 var split = message.message.content.split("'/'"),
                     id = split[0],
                     goal = split[1],
